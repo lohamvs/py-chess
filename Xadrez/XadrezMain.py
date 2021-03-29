@@ -25,7 +25,7 @@ def main():
 
 
 def carregaImagens():
-    pecas = ['wP', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
+    pecas = ['wp', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
     for peca in pecas:
         IMAGES[peca] = p.transform.scale(p.image.load("assets/" + peca + ".png"), (SQ_SIZE, SQ_SIZE))
 
