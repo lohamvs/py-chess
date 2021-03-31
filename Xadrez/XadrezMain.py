@@ -13,6 +13,8 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = XadrezRegras.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False
     carregaImagens()
     running = True
     sqSelected = ()
@@ -33,10 +35,21 @@ def main():
                     playerClicks.append(sqSelected)
                 if len(playerClicks) == 2:
                     move = XadrezMovimentos.Move(playerClicks[0], playerClicks[1], gs.board)
-                    print(move.getChessNotation())
-                    gs.makeMove(move)
-                    sqSelected = ()
-                    playerClicks = []
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
+                        sqSelected = ()
+                        playerClicks = []
+                    else:
+                        playerClicks = [sqSelected]
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z:
+                    gs.undoMove()
+                    moveMade = True
+
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
         interfaceGame(screen, gs)
         clock.tick(MAX_FPS)
