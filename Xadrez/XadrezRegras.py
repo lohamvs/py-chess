@@ -43,40 +43,7 @@ class GameState:
             self.blackKingLocation = (move.startRow, move.startCol)
 
     def getValidMoves(self):
-        moves = self.getAllPossibleMoves()
-        for i in range(len(moves) - 1, -1, -1):
-            self.makeMove(moves[i])
-            self.whiteToMove = not self.whiteToMove
-            if self.inCheck():
-                moves.remove(moves[i])
-            self.whiteToMove = not self.whiteToMove
-            self.undoMove()
-
-        if len(moves) == 0:
-            if self.inCheck():
-                self.checkMate = True
-            else: self.staleMate = True
-        else:
-            self.checkMate = False
-            self.staleMate = False
-
-        return moves
-
-    def inCheck(self):
-        if self.whiteToMove:
-            return self.squareUnderAttack(self.whiteKingLocation[0], self.whiteKingLocation[1])
-        else:
-            return self.squareUnderAttack(self.blackKingLocation[0], self.blackKingLocation[1])
-
-    def squareUnderAttack(self, r: int, c):
-        self.whiteToMove = not self.whiteToMove
-        oppMoves = self.getAllPossibleMoves()
-        self.whiteToMove = not self.whiteToMove
-        
-        for move in oppMoves:
-            if move.endRow == r and move.endCol == c:
-                return True
-        return False
+        return self.getAllPossibleMoves()
 
 
     def getAllPossibleMoves(self):
