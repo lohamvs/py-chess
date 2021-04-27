@@ -6,7 +6,7 @@ class Move():
                    "e": 4, "f": 5, "g": 6, "h": 7}
     colsToFiles = {v: k for k, v in filesToCols.items()}
 
-    def __init__(self, startSq, endSq, board, enpassantPossible = False):
+    def __init__(self, startSq, endSq, board):
         self.startRow = startSq[0]
         self.startCol = startSq[1]
         self.endRow = endSq[0]
@@ -14,14 +14,6 @@ class Move():
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
         self.moveId = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
-        
-        self.promotionChoice =  'Q'
-        self.isPawnPromotion = False
-        if (self.pieceMoved == 'wp' and self.endRow == 0) or (self.pieceMoved == 'bp' and self.endRow == 7):
-            self.isPawnPromotion = True
-        self.isEnpassantMove = enpassantPossible
-        if self.isEnpassantMove:
-            self.pieceCaptured = 'wp' if self.pieceMoved == 'bp' else 'bp'
 
     def __eq__(self, other):
         if isinstance(other, Move):
