@@ -1,5 +1,5 @@
 import pygame as p
-from Xadrez import XadrezRegras, XadrezMovimentos
+from Xadrez import XadrezRegras
 
 WIDTH = HEIGHT = 512  # 400 OUTRA OPÇÃO DE TAMANHO
 DIMENSION = 8
@@ -15,29 +15,10 @@ def main():
     gs = XadrezRegras.GameState()
     carregaImagens()
     running = True
-    sqSelected = ()
-    playerClicks = []
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-            elif e.type == p.MOUSEBUTTONDOWN:
-                location = p.mouse.get_pos()
-                col = location[0]//SQ_SIZE
-                row = location[1]//SQ_SIZE
-                if sqSelected == (row, col):
-                    sqSelected = ()
-                    playerClicks = []
-                else:
-                    sqSelected = (row, col)
-                    playerClicks.append(sqSelected)
-                if len(playerClicks) == 2:
-                    move = XadrezMovimentos.Move(playerClicks[0], playerClicks[1], gs.board)
-                    print(move.getChessNotation())
-                    gs.makeMove(move)
-                    sqSelected = ()
-                    playerClicks = []
-
         interfaceGame(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
