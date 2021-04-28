@@ -6,7 +6,7 @@ class Move():
                    "e": 4, "f": 5, "g": 6, "h": 7}
     colsToFiles = {v: k for k, v in filesToCols.items()}
 
-    def __init__(self, startSq, endSq, board, enpassantPossible = False):
+    def __init__(self, startSq, endSq, board, enpassantPossible = False, is_castle_move = False):
         self.startRow = startSq[0]
         self.startCol = startSq[1]
         self.endRow = endSq[0]
@@ -22,6 +22,9 @@ class Move():
         self.isEnpassantMove = enpassantPossible
         if self.isEnpassantMove:
             self.pieceCaptured = 'wp' if self.pieceMoved == 'bp' else 'bp'
+
+        # castle move
+        self.is_castle_move = is_castle_move
 
     def __eq__(self, other):
         if isinstance(other, Move):
