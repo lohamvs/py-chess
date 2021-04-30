@@ -273,101 +273,41 @@ class GameState:
         return moves
 
     def getPawnMoves(self, r, c, moves):
-        piecedPinned = False
+        piecePinned = False
         pinDirection = ()
-
-        for i in range(len(self.pins)-1, -1, -1):
+        for i in range(len(self.pins) - 1, -1, -1):
             if self.pins[i][0] == r and self.pins[i][1] == c:
-                piecedPinned = True
+                piecePinned = True
                 pinDirection = (self.pins[i][2], self.pins[i][3])
                 self.pins.remove(self.pins[i])
-                break;
+                break
 
         if self.whiteToMove:
             moveAmount = -1
             startRow = 6
-            enemyColor = 'b'
-            kingRow, kingCol = self.whiteKingLocation
+            enemyColor = "b"
         else:
             moveAmount = 1
             startRow = 1
-            enemyColor = 'w'
-            kingRow, kingCol = self.blackKingLocation
+            enemyColor = "w"
 
         if self.board[r + moveAmount][c] == "--":
-            if not piecedPinned or pinDirection == (moveAmount, 0):
+            if not piecePinned or pinDirection == (moveAmount, 0):
                 moves.append(Move((r, c), (r + moveAmount, c), self.board))
-                if r == startRow and self.board[r+2*moveAmount][c] == "--":
-                    moves.append(Move((r, c), (r+2*moveAmount, c), self.board))
-        if c-1 >= 0:
-            if not piecedPinned or pinDirection == (moveAmount, -1):
-                if self.board[r + moveAmount][c-1][0] == enemyColor:
-                    moves.append(Move((r, c), (r+moveAmount, c-1), self.board))
-                if (r + moveAmount, c-1) == self.enpassantPossible:
-                    attackingPiece = blockingPiece = False
-                    if kingRow == r:
-                        if kingCol < c:
-                            insideRange = range(kingCol + 1, c-1)
-                            outsideRange = range(c+1, 8)
-                        else:
-                            insideRange = range(kingCol - 1, c, -1)
-                            outsideRange = range(c-2, -1, -1)
-                        for i in insideRange:
-                            if self.board[r][i] != "--":
-                                blockingPiece = True
-                        for i in outsideRange:
-                            square = self.board[r][i]
-                            if square[0] == enemyColor and (square[1] == "R" or square[1] == "Q"):
-                                attackingPiece = True
-                            elif square != "--":
-                                blockingPiece = True
-                    if not attackingPiece or blockingPiece:
-                        moves.append(Move((r, c), (r+moveAmount, c-1), self.board, enpassantPossible = True))
-        if c+1 <= 7:
-            if not piecedPinned or pinDirection == (moveAmount, 1):
-                if self.board[r + moveAmount][c+1][0] == enemyColor:
-                    moves.append(Move((r, c), (r+moveAmount, c+1), self.board))
-                if(r+moveAmount, c+1) == self.enpassantPossible:
-                    attackingPiece = blockingPiece = False
-                    if kingRow == r:
-                        if kingCol < c:
-                            insideRange = range(kingCol + 1, c)
-                            outsideRange = range(c + 2, 8)
-                        else:
-                            insideRange = range(kingCol - 1, c + 1, -1)
-                            outsideRange = range(c - 1, -1, -1)
-                        for i in insideRange:
-                            if self.board[r][i] != "--":
-                                blockingPiece = True
-                        for i in outsideRange:
-                            square = self.board[r][i]
-                            if square[0] == enemyColor and (square[1] == "R" or square[1] == "Q"):
-                                attackingPiece = True
-                            elif square != "--":
-                                blockingPiece = True
-                    if not attackingPiece or blockingPiece:
-                        moves.append(Move((r, c), (r + moveAmount, c - 1), self.board, enpassantPossible=True))
-
-
-
-        else:
-            if self.board[r+1][c] == "--":
-                moves.append(Move((r, c), (r+1, c), self.board))
-                if r == 1 and self.board[r+2][c] == "--":
-                    moves.append(Move((r, c), (r+2, c), self.board))
-            if c-1 >= 0:
-                if self.board[r+1][c-1][0] == 'w':
-                    moves.append(Move((r, c), (r+1, c-1), self.board))
-                elif (r+1, c-1) == self.enpassantPossible:
-                    attackingPiece = blockingPiece = False
-                    #if kingRow = r:
-
-                    moves.append(Move((r, c), (r+1, c-1), self.board, enpassantPossible = True))
-            if c+1 <= 7:
-                if self.board[r+1][c+1][0] == 'w':
-                    moves.append(Move((r, c), (r+1, c+1), self.board))
-                elif (r+1, c+1) == self.enpassantPossible:
-                    moves.append(Move((r, c), (r+1, c+1), self.board, enpassantPossible = True))
+                if r == startRow and self.board[r + 2 * moveAmount][c] == "--":
+                    moves.append(Move((r, c), (r + 2 * moveAmount, c), self.board))
+        if c - 1 >= 0:  # capture to the left
+            if not piecePinned or pinDirection == (moveAmount, -1):
+                if self.board[r + moveAmount][c - 1][0] == enemyColor:
+                    moves.append(Move((r, c), (r + moveAmount, c - 1), self.board))
+                if (r + moveAmount, c - 1) == self.enpassantPossible:
+                    moves.append(Move((r, c), (r + moveAmount, c - 1), self.board, isEnpassantMove=True))
+        if c + 1 <= 7:  # capture to the right
+            if not piecePinned or pinDirection == (moveAmount, +1):
+                if self.board[r + moveAmount][c + 1][0] == enemyColor:
+                    moves.append(Move((r, c), (r + moveAmount, c + 1), self.board))
+                if (r + moveAmount, c + 1) == self.enpassantPossible:
+                    moves.append(Move((r, c), (r + moveAmount, c + 1), self.board, isEnpassantMove=True))
 
     def getRookMoves(self, r, c, moves):
         directions = ((-1, 0), (0, -1), (1, 0), (0, 1))

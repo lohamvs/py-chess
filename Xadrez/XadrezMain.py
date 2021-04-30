@@ -25,9 +25,10 @@ def main():
     sqSelected = ()
     player_clicks = []
     game_over = False
-    playerOne = True
-    playerTwo = False
-    AIThinking = False
+    playerOne = True # jogador humano = true, maquina = false
+    playerTwo = False # jogador humenao = true, maquina = false
+    #eh possivel setar false e false acima para fazer um jogo maquina vs maquina.
+    AIThinking = None
     moveFinderProcess = None
     moveUndone = False
     while running:
