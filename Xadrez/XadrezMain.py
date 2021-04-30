@@ -21,15 +21,41 @@ def main():
     moveMade = False
     animate = False
     carregaImagens()
-    running = True
+    waiting = True
+    running = False
     sqSelected = ()
     player_clicks = []
     game_over = False
-    playerOne = True
+    playerOne = False
     playerTwo = False
     AIThinking = False
     moveFinderProcess = None
     moveUndone = False
+
+    while waiting:
+        for e in p.event.get():
+            if e.type == p.QUIT:
+                running = False
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_1:
+                    playerOne = True
+                    playerTwo = False
+                    waiting = False
+                elif e.key == p.K_2:
+                    playerOne = False
+                    playerTwo = True
+                    waiting = False
+                elif e.key == p.K_3:
+                    playerOne = False
+                    playerTwo = False
+                    waiting = False
+        drawInstructionsText(screen)
+
+        clock.tick(MAX_FPS)
+        p.display.flip()   
+        
+    running = True
+
     while running:
         humanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
         for e in p.event.get():
@@ -191,7 +217,29 @@ def drawMoveLog(screen, gs, font):
         screen.blit(text_object, text_location)
         textY += text_object.get_height() + lineSpacing
 
-
+def drawInstructionsText(screen):
+    font = p.font.SysFont("Arial", 14, False, False)
+    moveLogRect = p.Rect(BOARD_WIDTH, 0, MOVE_LOG_PANEL_WIDTH, MOVE_LOG_PANEL_HEIGHT)
+    p.draw.rect(screen, p.Color("black"), moveLogRect)
+    texts = [
+        "---- INSTRUÇÕES ----", 
+        "",
+        "Pressione:",
+        "1 - Jogar como Brancas",
+        "2 - Jogar como Pretas",
+        "3 - IA vs IA",
+        ]
+    
+    movesPerRow = 3
+    padding = 5
+    lineSpacing = 2
+    textY = padding
+    for i in range(0, len(texts)):
+        text = texts[i]
+        text_object = font.render(text, True, p.Color("white"))
+        text_location = moveLogRect.move(padding, textY)
+        screen.blit(text_object, text_location)
+        textY += text_object.get_height() + lineSpacing
 
 
 def criaPecas(screen, board):
