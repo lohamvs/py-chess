@@ -38,7 +38,6 @@ class Move():
     def getRankFile(self, r, c):
         return self.colsToFiles[c] + self.rowsToRanks[r]
 
-
     def __str__(self):
         if self.is_castle_move:
             return "O-O" if self.endCol == 6 else "O-O-O"

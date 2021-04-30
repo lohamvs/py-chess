@@ -96,7 +96,6 @@ def main():
                 moveMade = True
                 animate = True
                 AIThinking = False
-
         if moveMade:
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
